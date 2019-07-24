@@ -114,8 +114,8 @@ final class CPTBase
     public function register_post_type()
     {
         \register_post_type(
-                            $this->get_type_name(),
-                            $this->get_merged_register_args()
+            $this->get_type_name(),
+            $this->get_merged_register_args()
                         );
     }
 
