@@ -9,6 +9,8 @@ use Webmozart\PathUtil\Path;
 
 final class CptLoader
 {
+    private $_media_dir;
+
     public function get_env(string $name) : string
     {
         $ret = \getenv($name);
@@ -45,14 +47,22 @@ final class CptLoader
         return Path::join($this->get_media_dir() . '/.config/cpts.yaml');
     }
 
-    public static function get_config() : array
+    public function get_config() : array
     {
+        //Load from cache, is possible
         $ret = wp_cache_get('cpt-config');
+
+        //See if we got something from the cache
         if (!is_array($ret)) {
+            //Try loading from the config file
+            //TODO: We should determine what to do if this is corrupt
             try {
+                //Get the value
                 $ret = Yaml::parseFile($this->get_cpt_yaml_file());
+                //Cache it
                 wp_cache_set('cpt-config', $ret);
             } catch (\Exception $ex) {
+                //For a failure, return an empty array and purge the cache
                 $ret = [];
                 wp_cache_delete('cpt-config');
             }
@@ -61,10 +71,10 @@ final class CptLoader
         return $ret;
     }
 
-    public static function create_cpt_objects() : array
+    public function create_cpt_objects() : array
     {
         $ret = [];
-        $config = self::get_config();
+        $config = $this->get_config();
         foreach ($config as $slug => $options) {
             $cpt = new CPTBase($slug);
 
@@ -96,7 +106,8 @@ final class CptLoader
 
     public static function register_all_cpts()
     {
-        $cpts = self::create_cpt_objects();
+        $obj = new self();
+        $cpts = $obj->create_cpt_objects();
         foreach ($cpts as $cpt) {
             $cpt->register_post_type();
         }

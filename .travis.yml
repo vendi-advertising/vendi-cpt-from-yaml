@@ -1,0 +1,18 @@
+language: php
+
+branches:
+  only:
+    - master
+
+matrix:
+  include:
+    - php: 7.1
+    - php: 7.2
+    - php: 7.3
+
+script:
+  - cd $TRAVIS_BUILD_DIR
+  - ./run-phpunit.sh --no-run-php-cs
+
+after_success:
+    - bash <(curl -s https://codecov.io/bash)
