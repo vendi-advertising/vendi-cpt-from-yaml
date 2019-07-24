@@ -1,0 +1,31 @@
+{
+    "name": "vendi-advertising/vendi-cpt-from-yaml",
+    "description" : "Loads CPTs from a yaml file",
+    "authors": [
+        {
+            "name": "Chris Haas",
+            "email": "chris@vendiadvertising.com"
+        }
+    ],
+    "require": {
+        "symfony/yaml": "^4.3",
+        "webmozart/path-util": "^2.3"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.10.2",
+        "jakub-onderka/php-parallel-lint": "dev-master",
+        "johnkary/phpunit-speedtrap": "^3.0",
+        "mikey179/vfsstream": "^1.6",
+        "phpunit/phpunit": "^7",
+        "sensiolabs/security-checker": "^6",
+        "symfony/var-dumper": "^4"
+    },
+    "config": {
+        "optimize-autoloader": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Vendi\\CptFromYaml\\": "src/"
+        }
+    }
+}
