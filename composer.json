@@ -18,7 +18,7 @@
         "mikey179/vfsstream": "^1.6",
         "phpunit/phpunit": "^7",
         "sensiolabs/security-checker": "^6",
-        "symfony/var-dumper": "^4"
+        "symfony/var-dumper": "^4|^5"
     },
     "config": {
         "optimize-autoloader": true
