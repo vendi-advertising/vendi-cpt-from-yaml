@@ -11,7 +11,7 @@ final class CptLoader
 {
     private $_media_dir;
 
-    public function get_env(string $name) : string
+    public function get_env(string $name): string
     {
         $ret = \getenv($name);
         if (false === $ret) {
@@ -20,7 +20,7 @@ final class CptLoader
         return $ret;
     }
 
-    public function get_media_dir() : string
+    public function get_media_dir(): string
     {
         if (!$this->_media_dir) {
             $this->_media_dir = \untrailingslashit(\get_template_directory());
@@ -29,7 +29,7 @@ final class CptLoader
         return $this->_media_dir;
     }
 
-    public function get_cpt_yaml_file() : string
+    public function get_cpt_yaml_file(): string
     {
         $file = $this->get_env('CPT_YAML_FILE');
 
@@ -47,7 +47,7 @@ final class CptLoader
         return Path::join($this->get_media_dir() . '/.config/cpts.yaml');
     }
 
-    public function get_config() : array
+    public function get_config(): array
     {
         //Load from cache, is possible
         $ret = wp_cache_get('cpt-config');
@@ -55,10 +55,14 @@ final class CptLoader
         //See if we got something from the cache
         if (!is_array($ret)) {
             //Try loading from the config file
-            //TODO: We should determine what to do if this is corrupt
             try {
                 //Get the value
                 $ret = Yaml::parseFile($this->get_cpt_yaml_file());
+
+                // The parser returns null if there was an error
+                if (!is_array($ret)) {
+                    $ret = [];
+                }
                 //Cache it
                 wp_cache_set('cpt-config', $ret);
             } catch (\Exception $ex) {
@@ -71,7 +75,7 @@ final class CptLoader
         return $ret;
     }
 
-    public function create_cpt_objects() : array
+    public function create_cpt_objects(): array
     {
         $ret = [];
         $config = $this->get_config();

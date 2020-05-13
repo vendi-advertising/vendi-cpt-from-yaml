@@ -8,6 +8,7 @@
         }
     ],
     "require": {
+        "php": "^7.3",
         "symfony/yaml": "^4.3|^5",
         "webmozart/path-util": "^2.3"
     },
