@@ -4,75 +4,13 @@ declare(strict_types=1);
 
 namespace Vendi\CptFromYaml;
 
-use Symfony\Component\Yaml\Yaml;
-use Webmozart\PathUtil\Path;
+use Vendi\YamlLoader\YamlLoaderBaseWithObjectCache;
 
-final class CptLoader
+final class CptLoader extends YamlLoaderBaseWithObjectCache
 {
-    private $_media_dir;
-
-    public function get_env(string $name): string
+    public function __construct()
     {
-        $ret = \getenv($name);
-        if (false === $ret) {
-            return '';
-        }
-        return $ret;
-    }
-
-    public function get_media_dir(): string
-    {
-        if (!$this->_media_dir) {
-            $this->_media_dir = \untrailingslashit(\get_template_directory());
-        }
-
-        return $this->_media_dir;
-    }
-
-    public function get_cpt_yaml_file(): string
-    {
-        $file = $this->get_env('CPT_YAML_FILE');
-
-        if ($file) {
-            //I don't like this but Path::isAbsolute doesn't support stream wrappers
-            if (\is_file($file)) {
-                return $file;
-            }
-
-            //makeAbsolute doesn't work against streams, apparently
-            return Path::makeAbsolute($file, $this->get_media_dir());
-        }
-
-        //This is the default
-        return Path::join($this->get_media_dir() . '/.config/cpts.yaml');
-    }
-
-    public function get_config(): array
-    {
-        //Load from cache, is possible
-        $ret = wp_cache_get('cpt-config');
-
-        //See if we got something from the cache
-        if (!is_array($ret)) {
-            //Try loading from the config file
-            try {
-                //Get the value
-                $ret = Yaml::parseFile($this->get_cpt_yaml_file());
-
-                // The parser returns null if there was an error
-                if (!is_array($ret)) {
-                    $ret = [];
-                }
-                //Cache it
-                wp_cache_set('cpt-config', $ret);
-            } catch (\Exception $ex) {
-                //For a failure, return an empty array and purge the cache
-                $ret = [];
-                wp_cache_delete('cpt-config');
-            }
-        }
-
-        return $ret;
+        parent::__construct('CPT_YAML_FILE', 'cpts.yaml', 'cpt-config');
     }
 
     public function create_cpt_objects(): array
@@ -108,12 +46,17 @@ final class CptLoader
         return $ret;
     }
 
-    public static function register_all_cpts()
+    public static function register_all_cpts(): void
     {
         $obj = new self();
         $cpts = $obj->create_cpt_objects();
         foreach ($cpts as $cpt) {
             $cpt->register_post_type();
         }
+    }
+
+    public function is_config_valid(array $config): bool
+    {
+        return true;
     }
 }

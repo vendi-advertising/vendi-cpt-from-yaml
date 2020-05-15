@@ -8,7 +8,7 @@
     >
     <testsuites>
         <testsuite name="Main">
-            <directory prefix="Test-" suffix=".php">./tests/</directory>
+            <directory prefix="Test_" suffix=".php">./tests/</directory>
         </testsuite>
     </testsuites>
 
@@ -22,22 +22,6 @@
         <whitelist>
             <directory suffix=".php">./src/</directory>
         </whitelist>
-<!--
-        <blacklist>
-          <directory suffix=".php">./tests/</directory>
-        </blacklist> -->
     </filter>
-
-    <listeners>
-        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener">
-            <arguments>
-                <array>
-                    <element key="slowThreshold">
-                        <integer>250</integer>
-                    </element>
-                </array>
-            </arguments>
-        </listener>
-    </listeners>
 
 </phpunit>
