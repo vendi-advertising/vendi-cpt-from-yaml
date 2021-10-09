@@ -9,7 +9,7 @@
     }
   ],
   "require": {
-    "php": "^7.3",
+    "php": "^7.3|^8.0",
     "symfony/yaml": "^4.3|^5",
     "webmozart/path-util": "^2.3",
     "vendi-advertising/vendi-yaml-loader": "^1.0.3"
