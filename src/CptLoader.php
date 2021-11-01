@@ -13,6 +13,9 @@ final class CptLoader extends YamlLoaderBaseWithObjectCache
         parent::__construct('CPT_YAML_FILE', 'cpts.yaml', 'cpt-config');
     }
 
+    /**
+     * @return CPTBase[]
+     */
     public function create_cpt_objects(): array
     {
         $ret = [];
@@ -40,18 +43,29 @@ final class CptLoader extends YamlLoaderBaseWithObjectCache
                 $cpt->set_extended_options($options['extended_options']);
             }
 
+            $taxonomies = TaxLoader::create_objects_from_cpt($slug, $options);
+            if (count($taxonomies)) {
+                $cpt->set_taxonomies($taxonomies);
+            }
+
             $ret[$slug] = $cpt;
         }
 
         return $ret;
     }
 
-    public static function register_all_cpts(): void
+    public static function register_all_cpts(bool $include_taxonomies = false): void
     {
         $obj = new self();
         $cpts = $obj->create_cpt_objects();
         foreach ($cpts as $cpt) {
             $cpt->register_post_type();
+
+            if ($include_taxonomies && $cpt->has_taxonomies()) {
+                foreach ($cpt->get_taxonomies() as $taxonomy) {
+                    $taxonomy->register_taxonomy();
+                }
+            }
         }
     }
 

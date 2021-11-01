@@ -4,112 +4,9 @@ declare(strict_types=1);
 
 namespace Vendi\CptFromYaml;
 
-final class CPTBase
+final class CPTBase extends GenericBase
 {
-    private $singular;
-
-    private $plural;
-
-    private $singular_lc;
-
-    private $plural_lc;
-
-    private $type_name;
-
-    private $extended_options = [];
-
-    public function __construct(string $type_name)
-    {
-        $this->type_name = $type_name;
-    }
-
-    public function _maybe_set_lower_case_versions(): void
-    {
-        if ($this->has_title_case_singular_name() && !$this->has_lower_case_singular_name()) {
-            $this->set_lower_case_singular_name(mb_strtolower($this->get_title_case_singular_name()));
-        }
-
-        if ($this->has_title_case_plural_name() && !$this->has_lower_case_plural_name()) {
-            $this->set_lower_case_plural_name(mb_strtolower($this->get_title_case_plural_name()));
-        }
-    }
-
-    public function get_extended_options(): array
-    {
-        return $this->extended_options;
-    }
-
-    public function set_extended_options(array $extended_options): void
-    {
-        $this->extended_options = $extended_options;
-    }
-
-    public function get_type_name(): string
-    {
-        return $this->type_name;
-    }
-
-    public function set_title_case_singular_name(string $singular): void
-    {
-        $this->singular = $singular;
-        $this->_maybe_set_lower_case_versions();
-    }
-
-    public function get_title_case_singular_name(): string
-    {
-        return $this->singular;
-    }
-
-    public function has_title_case_singular_name(): bool
-    {
-        return isset($this->singular);
-    }
-
-    public function set_title_case_plural_name(string $plural): void
-    {
-        $this->plural = $plural;
-        $this->_maybe_set_lower_case_versions();
-    }
-
-    public function get_title_case_plural_name(): string
-    {
-        return $this->plural;
-    }
-
-    public function has_title_case_plural_name(): bool
-    {
-        return isset($this->plural);
-    }
-
-    public function set_lower_case_singular_name(string $singular): void
-    {
-        $this->singular_lc = $singular;
-    }
-
-    public function get_lower_case_singular_name(): string
-    {
-        return $this->singular_lc;
-    }
-
-    public function has_lower_case_singular_name(): bool
-    {
-        return isset($this->singular_lc);
-    }
-
-    public function set_lower_case_plural_name(string $plural): void
-    {
-        $this->plural_lc = $plural;
-    }
-
-    public function get_lower_case_plural_name(): string
-    {
-        return $this->plural_lc;
-    }
-
-    public function has_lower_case_plural_name(): bool
-    {
-        return isset($this->plural_lc);
-    }
+    protected $taxonomies = [];
 
     public function register_post_type(): void
     {
@@ -186,5 +83,28 @@ final class CPTBase
         ];
 
         return array_merge($this->get_default_register_args(), $this->get_extended_options(), $local);
+    }
+
+    public function has_taxonomies(): bool
+    {
+        return count($this->get_taxonomies()) > 0;
+    }
+
+    /**
+     * @return TaxBase[]
+     */
+    public function get_taxonomies(): array
+    {
+        return $this->taxonomies;
+    }
+
+    public function add_taxonomy(TaxBase $taxonomy): void
+    {
+        $this->taxonomies[] = $taxonomy;
+    }
+
+    public function set_taxonomies(array $taxonomies): void
+    {
+        $this->taxonomies = $taxonomies;
     }
 }

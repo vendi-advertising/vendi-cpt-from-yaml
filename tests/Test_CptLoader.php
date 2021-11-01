@@ -7,46 +7,10 @@ namespace Vendi\CptFromYaml\tests;
 use org\bovigo\vfs\vfsStream;
 use Vendi\CptFromYaml\CPTBase;
 use Vendi\CptFromYaml\CptLoader;
-use Vendi\YamlLoader\YamlLoaderBase;
-use Vendi\YamlLoader\YamlLoaderBaseWithObjectCache;
 use Webmozart\PathUtil\Path;
 
 class Test_CptLoader extends test_base
 {
-    public function get_simple_mock(string $envVariableForFile = null, string $defaultFileName = null, string $cacheKey = null): YamlLoaderBase
-    {
-        if (!$envVariableForFile) {
-            $envVariableForFile = 'CPT_YAML_FILE';
-        }
-
-        if (!$defaultFileName) {
-            $defaultFileName = 'test-config.yaml';
-        }
-
-        if (!$cacheKey) {
-            $cacheKey = 'test-cache-key';
-        }
-
-        return new class ($envVariableForFile, $defaultFileName, $cacheKey) extends YamlLoaderBaseWithObjectCache {
-
-            public function is_config_valid(array $config): bool
-            {
-                return true;
-            }
-
-            public function get_env_key(): string
-            {
-                return $this->envVariableForFile;
-            }
-
-            public function get_protected_variable(string $var)
-            {
-                return $this->$var;
-            }
-
-        };
-    }
-
     /**
      * @covers \Vendi\CptFromYaml\CptLoader::create_cpt_objects
      */
@@ -66,6 +30,12 @@ class Test_CptLoader extends test_base
 alert:
     singular: Alert
     plural: Alerts
+    taxonomies:
+        new-category: 
+            singular: Category
+            plural: Categories
+            extended_options:
+                hierarchical: true
 TAG
         );
 
@@ -79,6 +49,8 @@ TAG
         $this->assertSame('Alert', $alert->get_title_case_singular_name());
         $this->assertSame('Alerts', $alert->get_title_case_plural_name());
         $this->assertSame('alert', $alert->get_type_name());
+
+        $this->assertCount(1, $alert->get_taxonomies());
 
         \putenv('CPT_YAML_FILE');
         unlink($file);
