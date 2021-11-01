@@ -7,6 +7,8 @@ namespace Vendi\CptFromYaml\tests;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
+use Vendi\YamlLoader\YamlLoaderBase;
+use Vendi\YamlLoader\YamlLoaderBaseWithObjectCache;
 
 /**
  * @coversNothing
@@ -54,5 +56,39 @@ class test_base extends TestCase
     private function reset_env(): void
     {
         \putenv('CPT_YAML_FILE');
+    }
+
+    public function get_simple_mock(string $envVariableForFile = null, string $defaultFileName = null, string $cacheKey = null): YamlLoaderBase
+    {
+        if (!$envVariableForFile) {
+            $envVariableForFile = 'CPT_YAML_FILE';
+        }
+
+        if (!$defaultFileName) {
+            $defaultFileName = 'test-config.yaml';
+        }
+
+        if (!$cacheKey) {
+            $cacheKey = 'test-cache-key';
+        }
+
+        return new class ($envVariableForFile, $defaultFileName, $cacheKey) extends YamlLoaderBaseWithObjectCache {
+
+            public function is_config_valid(array $config): bool
+            {
+                return true;
+            }
+
+            public function get_env_key(): string
+            {
+                return $this->envVariableForFile;
+            }
+
+            public function get_protected_variable(string $var)
+            {
+                return $this->$var;
+            }
+
+        };
     }
 }
