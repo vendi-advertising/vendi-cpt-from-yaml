@@ -7,7 +7,6 @@ namespace Vendi\CptFromYaml\tests;
 use org\bovigo\vfs\vfsStream;
 use Vendi\CptFromYaml\CPTBase;
 use Vendi\CptFromYaml\CptLoader;
-use Webmozart\PathUtil\Path;
 
 class Test_CptLoader extends test_base
 {
@@ -21,7 +20,7 @@ class Test_CptLoader extends test_base
         global $current_test_dir;
         $current_test_dir = '/cheese/';
 
-        $file = vfsStream::url(Path::join($this->get_root_dir_name_no_trailing_slash(), 'entry.yaml'));
+        $file = vfsStream::url($this->get_root_dir_name_no_trailing_slash() . '/' . 'entry.yaml');
         \putenv("${key}=${file}");
         \touch($file);
         file_put_contents(
