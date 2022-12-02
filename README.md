@@ -1,6 +1,6 @@
 # Custom Post Types (CPTs)
 
-[![Build Status](https://travis-ci.org/vendi-advertising/vendi-cpt-from-yaml.svg?branch=master)](https://travis-ci.org/vendi-advertising/vendi-cpt-from-yaml)
+[![PHP Composer](https://github.com/vendi-advertising/vendi-cpt-from-yaml/actions/workflows/php.yml/badge.svg)](https://github.com/vendi-advertising/vendi-cpt-from-yaml/actions/workflows/php.yml)
 [![codecov](https://codecov.io/gh/vendi-advertising/vendi-cpt-from-yaml/branch/master/graph/badge.svg)](https://codecov.io/gh/vendi-advertising/vendi-cpt-from-yaml)
 
 Vendi stores CPT information in [YAML](https://yaml.org/) files and uses this library for parsing and loading
