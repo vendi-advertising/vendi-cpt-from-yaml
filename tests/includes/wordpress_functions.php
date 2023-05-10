@@ -30,7 +30,7 @@ if(!function_exists('apply_filters')) {
     }
 }
 
-if(!function_exists('apply_filters')) {
+if(!function_exists('add_filter')) {
     // This mock ignores priority completely
     function add_filter(string $hook_name, callable $callback, int $priority = 10, int $accepted_args = 1)
     {
