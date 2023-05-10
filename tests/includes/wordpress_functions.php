@@ -18,9 +18,32 @@ if (!function_exists('untrailingslashit')) {
 }
 
 if(!function_exists('apply_filters')) {
-    function apply_filters(string $hook_name, mixed $value, mixed ...$args): mixed
+    function apply_filters(string $hook_name, mixed $value, mixed ...$args)
     {
+        global $hooks;
+        foreach($hooks[$hook_name] ?? [] as $callback)
+        {
+            $value = $callback($value, ...$args);
+        }
+    
         return $value;
+    }
+}
+
+if(!function_exists('apply_filters')) {
+    // This mock ignores priority completely
+    function add_filter(string $hook_name, callable $callback, int $priority = 10, int $accepted_args = 1)
+    {
+        global $hooks;
+        if(!is_array($hooks))
+        {
+            $hooks = [];
+        }
+        if(!isset($hooks[$hook_name]))
+        {
+            $hooks[$hook_name] = [];
+        }
+        $hooks[$hook_name][] = $callback;
     }
 }
 
