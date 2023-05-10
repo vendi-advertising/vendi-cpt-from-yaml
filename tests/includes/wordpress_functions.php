@@ -17,6 +17,13 @@ if (!function_exists('untrailingslashit')) {
     }
 }
 
+if(!function_exists('apply_filters')) {
+    function apply_filters(string $hook_name, mixed $value, mixed ...$args): mixed
+    {
+        return $value;
+    }
+}
+
 if (!function_exists('wp_cache_get')) {
     function wp_cache_get($key, $group = '', $force = false, &$found = null)
     {
