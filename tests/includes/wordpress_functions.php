@@ -2,6 +2,41 @@
 
 declare(strict_types=1);
 
+if(!function_exists('register_taxonomy')) {
+    // This function does not necessarily accurately mock the more complicated taxonomy/CPT relationship,
+    // but should be sufficient for testing purposes
+    function register_taxonomy(string $taxonomy, array|string $object_type, array|string $args = [])
+    {
+        global $mock_registered_taxonomies;
+        if(!is_array($mock_registered_taxonomies)) {
+            $mock_registered_taxonomies = [];
+        }
+        
+        if(!isset($mock_registered_taxonomies[$taxonomy])){
+            $mock_registered_taxonomies[$taxonomy] = [];
+        }
+        
+        if(!is_array($object_type)){
+            $object_type = [$object_type];
+        }
+        foreach($object_type as $name){
+            $mock_registered_taxonomies[$taxonomy][$name] = $args;
+        }
+    }
+}
+
+if (!function_exists('register_post_type')) {
+    function register_post_type(string $post_type, array|string $args = [])
+    {
+        global $mock_registered_post_types;
+        if(!is_array($mock_registered_post_types)) {
+            $mock_registered_post_types = [];
+        }
+        
+        $mock_registered_post_types[$post_type] = $args;
+    }
+}
+
 if (!function_exists('get_template_directory')) {
     function get_template_directory()
     {
