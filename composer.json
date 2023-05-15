@@ -9,9 +9,9 @@
     }
   ],
   "require": {
-    "php": "^7.3|^8.0",
+    "php": "8.0.*|8.1.*|8.2.*",
     "symfony/yaml": "^5|^6",
-    "vendi-advertising/vendi-yaml-loader": "^1|^2"
+    "vendi-advertising/vendi-yaml-loader": "^2|^3"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
@@ -24,6 +24,11 @@
   "autoload": {
     "psr-4": {
       "Vendi\\CptFromYaml\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Vendi\\CptFromYaml\\tests\\": "tests/"
     }
   }
 }

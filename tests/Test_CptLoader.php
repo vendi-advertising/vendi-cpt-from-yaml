@@ -42,7 +42,6 @@ TAG
         $this->assertCount(1, $cpts);
         $this->assertArrayHasKey('alert', $cpts);
 
-        /* @var CPTBase $alert */
         $alert = $cpts['alert'];
         $this->assertInstanceOf(CPTBase::class, $alert);
         $this->assertSame('Alert', $alert->get_title_case_singular_name());

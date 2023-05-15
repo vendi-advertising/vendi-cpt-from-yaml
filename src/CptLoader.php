@@ -60,7 +60,7 @@ final class CptLoader extends YamlLoaderBaseWithObjectCache
         $cpts = $obj->create_cpt_objects();
         foreach ($cpts as $cpt) {
             // Add a filter so that specific CPTs can be opted out if needed
-            if(!\apply_filters('vendi/cpt-loader/should-register-post-type', true, $cpt)){
+            if (!\apply_filters('vendi/cpt-loader/should-register-post-type', true, $cpt)) {
                 continue;
             }
             $cpt->register_post_type();
@@ -68,7 +68,7 @@ final class CptLoader extends YamlLoaderBaseWithObjectCache
             if ($include_taxonomies && $cpt->has_taxonomies()) {
                 foreach ($cpt->get_taxonomies() as $taxonomy) {
                     // Add a filter so that specific taxonomies and CPT can be opted out if needed
-                    if(!\apply_filters('vendi/cpt-loader/should-register-taxonomy', true, $cpt, $taxonomy)){
+                    if (!\apply_filters('vendi/cpt-loader/should-register-taxonomy', true, $cpt, $taxonomy)) {
                         continue;
                     }
                     $taxonomy->register_taxonomy();

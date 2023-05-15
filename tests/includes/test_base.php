@@ -30,6 +30,7 @@ class test_base extends TestCase
                 []
             );
         }
+
         return $this->_root;
     }
 
